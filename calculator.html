@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P TOOLS - Calculator</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: #050505;
+  color: white;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.calculator {
+  width: 100%;
+  max-width: 380px;
+  background: #101010;
+  border: 1px solid #292929;
+  border-radius: 24px;
+  padding: 20px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.5);
+}
+
+.logo {
+  text-align: center;
+  font-size: 20px;
+  letter-spacing: 3px;
+  margin-bottom: 20px;
+}
+
+.display {
+  width: 100%;
+  height: 90px;
+  background: #050505;
+  border: 1px solid #252525;
+  border-radius: 15px;
+  margin-bottom: 18px;
+  padding: 20px;
+  font-size: 32px;
+  text-align: right;
+  color: white;
+  overflow: hidden;
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+button {
+  height: 65px;
+  border: 0;
+  border-radius: 15px;
+  background: #1b1b1b;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+button:active {
+  transform: scale(.95);
+}
+
+.operator {
+  background: #292929;
+}
+
+.clear {
+  background: #3a3a3a;
+}
+
+.equal {
+  background: white;
+  color: black;
+}
+
+.zero {
+  grid-column: span 2;
+}
+</style>
+</head>
+
+<body>
+
+<div class="calculator">
+
+  <div class="logo">⚡ P TOOLS</div>
+
+  <div class="display" id="display">0</div>
+
+  <div class="buttons">
+
+    <button class="clear" onclick="clearDisplay()">C</button>
+    <button onclick="deleteLast()">⌫</button>
+    <button class="operator" onclick="addValue('%')">%</button>
+    <button class="operator" onclick="addValue('/')">÷</button>
+
+    <button onclick="addValue('7')">7</button>
+    <button onclick="addValue('8')">8</button>
+    <button onclick="addValue('9')">9</button>
+    <button class="operator" onclick="addValue('*')">×</button>
+
+    <button onclick="addValue('4')">4</button>
+    <button onclick="addValue('5')">5</button>
+    <button onclick="addValue('6')">6</button>
+    <button class="operator" onclick="addValue('-')">−</button>
+
+    <button onclick="addValue('1')">1</button>
+    <button onclick="addValue('2')">2</button>
+    <button onclick="addValue('3')">3</button>
+    <button class="operator" onclick="addValue('+')">+</button>
+
+    <button class="zero" onclick="addValue('0')">0</button>
+    <button onclick="addValue('.')">.</button>
+    <button class="equal" onclick="calculate()">=</button>
+
+  </div>
+</div>
+
+<script>
+let display = document.getElementById("display");
+
+function addValue(value) {
+  if (display.innerText === "0" && value !== ".") {
+    display.innerText = value;
+  } else {
+    display.innerText += value;
+  }
+}
+
+function clearDisplay() {
+  display.innerText = "0";
+}
+
+function deleteLast() {
+  if (display.innerText.length <= 1) {
+    display.innerText = "0";
+  } else {
+    display.innerText =
+      display.innerText.slice(0, -1);
+  }
+}
+
+function calculate() {
+  try {
+    let expression = display.innerText.replace(/%/g, "/100");
+    let result = Function(
+      '"use strict"; return (' + expression + ')'
+    )();
+
+    display.innerText = result;
+  } catch {
+    display.innerText = "Error";
+  }
+}
+</script>
+
+</body>
+</html>
